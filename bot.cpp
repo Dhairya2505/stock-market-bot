@@ -164,11 +164,12 @@ void buyer(OrderBook &ob)
 
     while (1)
     {
+
         double x = gen_trade(gen) * 100.0;
         double change = perc(gen) / 10.0;
         int qty = qty_dist(gen);
         double price;
-        if (x > 1.0)
+        if (x > 3.0)
         {
             price = ob.get_price() * (1.0 - change / 100.0);
         }
@@ -177,6 +178,7 @@ void buyer(OrderBook &ob)
             price = ob.get_price() * (1.0 + change / 100.0);
         }
         ob.place_bids(round_to_2(price), qty);
+        this_thread::sleep_for(chrono::milliseconds(20));
     }
 }
 
@@ -196,7 +198,7 @@ void seller(OrderBook &ob)
         double change = perc(gen) / 10.0;
         int qty = qty_dist(gen);
         double price;
-        if (x > 1.0)
+        if (x > 3.0)
         {
             price = ob.get_price() * (1.0 + change / 100.0);
         }
@@ -205,6 +207,7 @@ void seller(OrderBook &ob)
             price = ob.get_price() * (1.0 - change / 100.0);
         }
         ob.place_asks(round_to_2(price), qty);
+        this_thread::sleep_for(chrono::milliseconds(20));
     }
 }
 
@@ -215,7 +218,7 @@ void print_orderBook(OrderBook &ob)
         map<double, int> asks = ob.get_asks();
         map<double, int, greater<double>> bids = ob.get_bids();
         system("cls");
-        
+
         int count = 0;
         vector<pair<double, int>> first10;
         for (auto &p : asks)
